@@ -1,29 +1,7 @@
----
-title: Discord bot
-description: A Discord bot written in JavaScript
-tags:
-  - discord.js
-  - javascript
----
+# Discord Bot - Send insight to Productboard
 
-# Discord.js Example
-
-This example starts a Discord bot using [discord.js](https://discord.js.org/#/).
-
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/jX0xQo)
-
-## ✨ Features
-
-- Discord.js
-- JavaScript
-
-## 💁‍♀️ How to use
-
-- Install dependencies `yarn`
-- Connect to your Railway project `railway link`
-- Start the bot `railway run yarn dev`
-
-## 📝 Notes
-
-- To create a new command, just create a file in the `Commands` directory. You can take a look at the `Template.js` file for an example of what commands should look like. For any additional help see the [discord.js guide](https://discordjs.guide).
-- If you need any additional help with this, join our [Discord server](https://discord.gg/railway) and create a thread in the project help channel.
+This bot is used to send insight to Productboard from Discord. Every messages that received the reaction `:productboard:` will be sent to Productboard.
+In those insight, we will have the following information:
+- The message content
+- The author name as an external ID
+- The message URL
