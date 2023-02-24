@@ -1,6 +1,7 @@
 // Execute code when the "ready" client event is triggered.
 // Require the necessary discord.js classes
-const { Client, Events, GatewayIntentBits, Partials } = require("discord.js");
+import { Client, Events, GatewayIntentBits, Partials } from "discord.js";
+import fetch from "node-fetch";
 
 // Token from Railway Env Variable.
 const token = process.env.DISCORD_TOKEN;
@@ -11,6 +12,7 @@ const client = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.GuildMessageReactions,
+    GatewayIntentBits.MessageContent,
   ],
   partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
@@ -37,14 +39,36 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
 
   // check if the reaction is a :productboard: emoji
   if (reaction.emoji.name === "productboard") {
-    // get the message author
-    const messageAuthor = reaction.message.author;
+    // get the message author name
+    const messageAuthor = reaction.message.author.username;
     // get the message content
     const messageContent = reaction.message.content;
-    // get the message author email
-    const messageAuthorEmail = reaction.message.author.email;
-    // log the message author, message content and message author email
-    console.log({ messageAuthor, messageContent, messageAuthorEmail });
+    // get the message url (to be used as the insight link)
+    const messageUrl = reaction.message.url;
+
+    // Send the information to ProductBoard
+    const response = await fetch("https://api.productboard.com/notes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.PRODUCTBOARD_TOKEN}`,
+      },
+      body: JSON.stringify({
+        title: "Insight from Discord",
+        content: messageContent,
+        display_url: messageUrl,
+        user: {
+          external_id: messageAuthor,
+        },
+        source: {
+          origin: "Discord",
+          record_id: messageUrl,
+        },
+        tags: ["from: discord"],
+      }),
+    });
+    // log the response
+    console.log(response);
   }
 });
 
