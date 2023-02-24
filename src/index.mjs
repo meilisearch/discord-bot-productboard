@@ -45,6 +45,8 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
     const messageContent = reaction.message.content;
     // get the message url (to be used as the insight link)
     const messageUrl = reaction.message.url;
+    // get the message channel name
+    const messageChannel = reaction.message.channel.name;
 
     // Send the information to ProductBoard
     const response = await fetch("https://api.productboard.com/notes", {
@@ -54,7 +56,7 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
         Authorization: `Bearer ${process.env.PRODUCTBOARD_TOKEN}`,
       },
       body: JSON.stringify({
-        title: "Insight from Discord",
+        title: `Insight from Discord - ${messageChannel}`,
         content: messageContent,
         display_url: messageUrl,
         user: {
@@ -68,7 +70,7 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
       }),
     });
     // log the response
-    console.log(response);
+    console.log(response.status);
   }
 });
 
