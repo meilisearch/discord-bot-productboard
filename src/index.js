@@ -20,7 +20,7 @@ const client = new Client({
 client.once(Events.ClientReady, (c) => {
   console.log(`Ready! Logged in as ${c.user.tag}`);
 });
-// When someone react to a message with a :producboard: emoji,
+// When someone react to a message with a :productboard: emoji,
 // take the message and the user info, and create a new insight on ProductBoard.
 client.on(Events.MessageReactionAdd, async (reaction, user) => {
   // When a reaction is received, check if the structure is partial
@@ -35,14 +35,17 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
     }
   }
 
-  // Now the message has been cached and is fully available
-  console.log(
-    `${reaction.message.author}'s message "${reaction.message.content}" gained a reaction!`
-  );
-  // The reaction is now also fully available and the properties will be reflected accurately:
-  console.log(
-    `${reaction.count} user(s) have given the same reaction to this message!`
-  );
+  // check if the reaction is a :productboard: emoji
+  if (reaction.emoji.name === "productboard") {
+    // get the message author
+    const messageAuthor = reaction.message.author;
+    // get the message content
+    const messageContent = reaction.message.content;
+    // get the message author email
+    const messageAuthorEmail = reaction.message.author.email;
+    // log the message author, message content and message author email
+    console.log({ messageAuthor, messageContent, messageAuthorEmail });
+  }
 });
 
 // Log in to Discord with your client's token
